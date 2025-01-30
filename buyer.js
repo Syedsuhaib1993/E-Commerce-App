@@ -33,16 +33,19 @@ function fetchcarttoui(products) {
           </div>
           <div class="container">
             <button class="btn btn-primary">Add to Cart</button>
-            <button onclick="buycart(${products})" class="btn btn-danger">Buy Now</button>
+            <button onclick="buycart(${products.id})" class="btn btn-danger">Buy Now</button>
           </div>
         </div>`;
     //   console.log(cartchild);
   
     cart.appendChild(cartchild);
+
   }
   
   fetchcart()
 function buycart(buyid){
     console.log(buyid);
+    localStorage.setItem('productid',buyid)
+    window.location.href = '/buy.html'
     
 }
