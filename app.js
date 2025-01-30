@@ -12,7 +12,15 @@ const roleInp = document.getElementById('inputRole')
 
 const inputEmail = document.getElementById('inputEmail')
 const inputPassword = document.getElementById('inputPassword')
+const signin = document.querySelector('.signin')
+const signup = document.querySelector('.signup')
  
+function switchToSignup(){
+  signin.setAttribute('class','d-none')
+  signup.setAttribute('class','d-block')
+  
+  
+}
 
 async function signUp(){
     const email = emailInp.value
@@ -20,7 +28,7 @@ async function signUp(){
     const address = addressInp.value
     const city = cityInp.value
     const role = roleInp.value
-    console.log(email,password,address,city,role);
+    // console.log(email,password,address,city,role);
 
     const { data, error } = await supabaseClient.auth.signUp({
         email: email,
@@ -51,13 +59,28 @@ async function signIn(){
         email: Email,
         password: Password,
       })
-      console.log(data);
 
-      if (data) {
-        alert('signin successfull')
-      }else{
-        alert('error')
+
+      if(error){
+        alert('login failed')
+        return
       }
-      
+  console.log(data.user.id);
+      const { data:tabledata, error:tableerror } = await supabaseClient
+  .from('users')
+  .select()
+  .eq('uid',data.user.id)
+  .single()
+  console.log(tabledata);
+  
+if(tabledata.role==="vendor"){
+  window.location.href = "/vendor.html"
+}else if(tabledata.role==="buyer"){
+  window.location.href = "/buyer.html"
+}else if(tabledata.role==="admin"){
+  window.location.href = "/admin.html"
+}else{
+  alert('no match found')
+}
       
 }
