@@ -10,10 +10,16 @@ const priceinp = document.getElementById("price");
 const picinp = document.getElementById("pic");
 const cart = document.getElementById("cart");
 
+const key = localStorage.getItem('sb-pnbielvmkcexbdblnyep-auth-token')
+const keyParse = JSON.parse(key)
+console.log(keyParse.user.id);
+
+
 async function fetchcart() {
   const { data: products, error: producterror } = await supabaseClient
     .from("product")
-    .select();
+    .select()
+    .eq('userid',keyParse.user.id);
   //   console.log(product);
   for (var i = 0; i < products.length; i++) {
     // console.log(products[i]);
@@ -47,10 +53,19 @@ async function addproduct() {
 
   const { error } = await supabaseClient
     .from("product")
-    .insert({ title, description, price, imgUrl: data.fullPath });
+    .insert({ title,
+       description,
+        price, 
+        imgUrl: data.fullPath,
+        userid: keyParse.user.id});
   if (!error) {
     alert("upload");
   }
+ titleinp.value = "" 
+ descinp.value = ""
+ priceinp.value=""
+//  picinp.files = null
+
   fetchcart()
 }
 

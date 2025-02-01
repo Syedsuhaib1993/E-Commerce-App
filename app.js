@@ -43,7 +43,10 @@ async function signUp(){
 
     const {data:userdata, error:usererror } = await supabaseClient
   .from('users')
-  .insert({ address,city,role,uid:data.user.id})
+  .insert({ address,
+    city,
+    role,
+    uid:data.user.id})
   .select()
 
   

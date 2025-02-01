@@ -10,9 +10,11 @@ const price = document.getElementById('price')
 const img = document.getElementById('img')
 // console.log(title,desc,price,img);
 
+const ID = JSON.parse(localStorage.getItem('sb-pnbielvmkcexbdblnyep-auth-token'))
+console.log(ID.user.id);
 
 const buyid = localStorage.getItem('productid')
-// console.log(buyid);
+console.log(buyid);
 
 async function getbuyproduct(){
     const { data, error } = await supabaseClient
@@ -21,14 +23,26 @@ async function getbuyproduct(){
   .eq('id' , buyid)
   .single()
     console.log(data);
+    localStorage.setItem('title',data.title)
+    localStorage.setItem('price',data.price)
     title.innerHTML = data.title
     desc.innerHTML = data.description
     price.innerHTML = data.price
     img.setAttribute('src',`${supabaseUrl}/storage/v1/object/${data.imgUrl}`)
+
 }
 
 getbuyproduct()
 
-function backtobuyer(){
+async function backtobuyer(){
+  const { error } = await supabaseClient
+  .from('sells')
+  .insert({ 
+      title:localStorage.getItem('title'),
+      price:localStorage.getItem('price'),
+      productid:buyid,
+      userid:ID.user.id
+   })
+
     window.location.href = '/buyer.html'
 }
